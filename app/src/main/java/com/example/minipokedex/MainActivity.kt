@@ -112,12 +112,12 @@ class MainActivity : AppCompatActivity() {
                     currentBasePokemonList = completeApiPokemonList // Initially, base list is the complete list
                     applyAllFilters() // Apply any default or persisted filters
                 } else {
-                    Log.e("MainActivity", "Error fetching initial Pokemon list: \${response.code()} \${response.message()}")
+                    Log.e("MainActivity", "Error fetching initial Pokemon list: ${response.code()} ${response.message()}")
                     Toast.makeText(this@MainActivity, "Error fetching Pokémon list", Toast.LENGTH_LONG).show()
                 }
             } catch (e: Exception) {
                 Log.e("MainActivity", "Exception fetching initial Pokemon list", e)
-                Toast.makeText(this@MainActivity, "Exception: \${e.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@MainActivity, "Exception: ${e.message}", Toast.LENGTH_LONG).show()
             } finally {
                 binding.recyclerView.alpha = 1.0f
             }
@@ -136,7 +136,7 @@ class MainActivity : AppCompatActivity() {
                         Toast.makeText(this@MainActivity, "Failed to load Pokémon types", Toast.LENGTH_SHORT).show()
                     }
                 } catch (e: Exception) {
-                    Toast.makeText(this@MainActivity, "Error loading types: \${e.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@MainActivity, "Error loading types: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
             }
         } else {
@@ -159,7 +159,7 @@ class MainActivity : AppCompatActivity() {
                 } else {
                     val selectedType = allApiPokemonTypes[which - 1] // Adjust index for "ALL TYPES"
                     selectedTypeNameFilter = selectedType.name
-                    binding.filterByTypeButton.text = "Type: \${selectedType.name.uppercase(Locale.getDefault())}"
+                    binding.filterByTypeButton.text = "Type: ${selectedType.name.uppercase(Locale.getDefault())}" // Corrected here
                     // Fetch Pokémon for this type and set it as the base list
                     fetchPokemonsByTypeAndUpdateBaseList(selectedType.name)
                     // applyAllFilters() will be called within fetchPokemonsByTypeAndUpdateBaseList upon completion
@@ -177,13 +177,13 @@ class MainActivity : AppCompatActivity() {
                 if (response.isSuccessful && response.body() != null) {
                     currentBasePokemonList = response.body()!!.pokemonSlots.map { it.pokemon }
                 } else {
-                    Log.e("MainActivity", "Error fetching type details for \'$typeName\': \${response.code()} \${response.message()}")
-                    Toast.makeText(this@MainActivity, "Failed to load Pokémon of type \'$typeName\'", Toast.LENGTH_SHORT).show()
+                    Log.e("MainActivity", "Error fetching type details for '$typeName': ${response.code()} ${response.message()}")
+                    Toast.makeText(this@MainActivity, "Failed to load Pokémon of type '$typeName'", Toast.LENGTH_SHORT).show()
                     currentBasePokemonList = emptyList() // Fallback to empty if API fails
                 }
             } catch (e: Exception) {
-                Log.e("MainActivity", "Exception fetching type \'$typeName\'", e)
-                Toast.makeText(this@MainActivity, "Error loading type \'$typeName\': \${e.message}", Toast.LENGTH_SHORT).show()
+                Log.e("MainActivity", "Exception fetching type '$typeName'", e)
+                Toast.makeText(this@MainActivity, "Error loading type '$typeName': ${e.message}", Toast.LENGTH_SHORT).show()
                 currentBasePokemonList = emptyList()
             }
             applyAllFilters() // Re-apply all filters as the base list has changed

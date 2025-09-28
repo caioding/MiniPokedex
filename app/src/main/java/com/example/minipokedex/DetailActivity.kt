@@ -53,12 +53,12 @@ class DetailActivity : AppCompatActivity() {
                     populateUi(response.body()!!)
                     binding.detailPokemonImageView.visibility = View.VISIBLE
                 } else {
-                    Log.e("DetailActivity", "Error fetching details for \"$identifier\": \${response.code()} \${response.message()}")
+                    Log.e("DetailActivity", "Error fetching details for \"$identifier\": ${response.code()} ${response.message()}")
                     Toast.makeText(this@DetailActivity, "Error fetching details for \"$identifier\"", Toast.LENGTH_LONG).show()
                 }
             } catch (e: Exception) {
                 Log.e("DetailActivity", "Exception fetching details for \"$identifier\"", e)
-                Toast.makeText(this@DetailActivity, "Exception: \${e.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@DetailActivity, "Exception: ${e.message}", Toast.LENGTH_LONG).show()
             }
         }
     }
@@ -69,7 +69,7 @@ class DetailActivity : AppCompatActivity() {
             if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() 
         }
 
-        binding.detailPokemonNameTextView.text = "\${pokemon.name.uppercase(Locale.getDefault())} (#\${pokemon.id})"
+        binding.detailPokemonNameTextView.text = "${pokemon.name.uppercase(Locale.getDefault())} (#${pokemon.id})" // Corrected here
         
         // Use official artwork if available, otherwise fallback to front_default sprite
         val imageUrl = pokemon.sprites.other?.officialArtwork?.frontDefault ?: pokemon.sprites.frontDefault
@@ -91,7 +91,8 @@ class DetailActivity : AppCompatActivity() {
         val statsText = pokemon.stats
             .filter { statsToShow.contains(it.stat.name.lowercase(Locale.ROOT)) }
             .joinToString("\n") {
-                "\${it.stat.name.replaceFirstChar { char -> char.titlecase(Locale.getDefault()) }}: \${it.baseStat}"
+                // Corrected here
+                "${it.stat.name.replaceFirstChar { char -> char.titlecase(Locale.getDefault()) }}: ${it.baseStat}"
             }
         binding.detailPokemonStatsTextView.text = statsText
     }

@@ -40,13 +40,9 @@ MiniPokedex is a simple Android application built with Kotlin that consumes the 
 1.  **Clone the Repository (or ensure you have the project files).**
 2.  **Open in Android Studio:** Open the project using Android Studio (latest stable version recommended).
 3.  **Sync Gradle Files:** Android Studio should automatically sync the Gradle files and download the required dependencies. If not, trigger a manual sync (File > Sync Project with Gradle Files or the elephant icon in the toolbar).
-4.  **Add App Icon (Manual Step if not already present):
-    *   This project is configured to use `ic_pokeball_launcher.png` and `ic_pokeball_launcher_round.png` as its launcher icons (defined in `AndroidManifest.xml`).
-    *   Ensure you have these icon files (or your preferred icons) in the respective `res/mipmap-*` density folders (e.g., `res/mipmap-mdpi`, `res/mipmap-hdpi`, etc.).
-    *   You can use Android Studio's **Asset Studio** (Right-click `res` > New > Image Asset) to generate these adaptive and legacy launcher icons easily from a source image.
-5.  **Connect a Device or Start an Emulator:**
+4.  **Connect a Device or Start an Emulator:**
     *   Ensure you have an Android device connected with USB Debugging enabled, or an Android Virtual Device (AVD) running from the Device Manager.
-6.  **Run the Application:**
+5.  **Run the Application:**
     *   Select your target device/emulator from the dropdown menu in the toolbar.
     *   Click the **Run 'app'** button (green play icon) or use the menu option `Run > Run 'app'`.
 

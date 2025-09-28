@@ -39,6 +39,7 @@ class PokemonAdapter(
             binding.pokemonNameTextView.text = pokemon.name.replaceFirstChar { 
                 if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() 
             }
+            binding.pokemonIdTextView.text = "#${pokemon.getPokemonId()}" // Added this line
             binding.pokemonImageView.load(pokemon.getImageUrl()) {
                 crossfade(true)
                 placeholder(R.mipmap.ic_launcher) // Generic placeholder

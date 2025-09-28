@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">MiniPokedex</string>
+    <string name="pokemon_image_content_description">Image of the Pokémon</string>
+</resources>

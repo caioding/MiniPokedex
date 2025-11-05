@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -44,14 +45,26 @@ class DetailActivity : AppCompatActivity() {
         }
     }
 
+    private fun showLoading(show: Boolean) {
+        val loadingContainer = findViewById<View>(R.id.loadingContainer)
+        val loadingImageView = findViewById<View>(R.id.loadingImageView)
+        if (show) {
+            loadingContainer.visibility = View.VISIBLE
+            val rotateAnimation = AnimationUtils.loadAnimation(this, R.anim.rotate_animation)
+            loadingImageView.startAnimation(rotateAnimation)
+        } else {
+            loadingContainer.visibility = View.GONE
+            loadingImageView.clearAnimation()
+        }
+    }
+
     private fun fetchPokemonDetails(identifier: String) {
-        binding.detailPokemonImageView.visibility = View.INVISIBLE // Hide until loaded
         lifecycleScope.launch {
+            showLoading(true)
             try {
                 val response = RetrofitInstance.api.getPokemonDetail(identifier.lowercase(Locale.ROOT))
                 if (response.isSuccessful && response.body() != null) {
                     populateUi(response.body()!!)
-                    binding.detailPokemonImageView.visibility = View.VISIBLE
                 } else {
                     Log.e("DetailActivity", "Error fetching details for \"$identifier\": ${response.code()} ${response.message()}")
                     Toast.makeText(this@DetailActivity, "Error fetching details for \"$identifier\"", Toast.LENGTH_LONG).show()
@@ -59,6 +72,8 @@ class DetailActivity : AppCompatActivity() {
             } catch (e: Exception) {
                 Log.e("DetailActivity", "Exception fetching details for \"$identifier\"", e)
                 Toast.makeText(this@DetailActivity, "Exception: ${e.message}", Toast.LENGTH_LONG).show()
+            } finally {
+                showLoading(false)
             }
         }
     }

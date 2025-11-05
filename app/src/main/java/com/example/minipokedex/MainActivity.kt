@@ -3,6 +3,8 @@ package com.example.minipokedex
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -61,6 +63,19 @@ class MainActivity : AppCompatActivity() {
         fetchInitialPokemonData() // Fetch all Pokémon to start
     }
 
+    private fun showLoading(show: Boolean) {
+        val loadingContainer = findViewById<View>(R.id.loadingContainer)
+        val loadingImageView = findViewById<View>(R.id.loadingImageView)
+        if (show) {
+            loadingContainer.visibility = View.VISIBLE
+            val rotateAnimation = AnimationUtils.loadAnimation(this, R.anim.rotate_animation)
+            loadingImageView.startAnimation(rotateAnimation)
+        } else {
+            loadingContainer.visibility = View.GONE
+            loadingImageView.clearAnimation()
+        }
+    }
+
     private fun setupRecyclerView() {
         pokemonAdapter = PokemonAdapter(emptyList()) { pokemon ->
             val intent = Intent(this, DetailActivity::class.java)
@@ -101,7 +116,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun fetchInitialPokemonData() {
         lifecycleScope.launch {
-            binding.recyclerView.alpha = 0.5f // Indicate loading
+            showLoading(true)
             try {
                 // Fetch a large list to allow for local filtering by generation
                 // PokeAPI v2 /pokemon endpoint lists up to 1025 (Pecharunt as of latest check for Gen IX)
@@ -119,7 +134,7 @@ class MainActivity : AppCompatActivity() {
                 Log.e("MainActivity", "Exception fetching initial Pokemon list", e)
                 Toast.makeText(this@MainActivity, "Exception: ${e.message}", Toast.LENGTH_LONG).show()
             } finally {
-                binding.recyclerView.alpha = 1.0f
+                showLoading(false)
             }
         }
     }
@@ -127,6 +142,7 @@ class MainActivity : AppCompatActivity() {
     private fun showTypeSelectionDialog() {
         if (allApiPokemonTypes.isEmpty()) {
             lifecycleScope.launch {
+                showLoading(true)
                 try {
                     val response = RetrofitInstance.api.getPokemonTypes()
                     if (response.isSuccessful && response.body() != null) {
@@ -137,6 +153,8 @@ class MainActivity : AppCompatActivity() {
                     }
                 } catch (e: Exception) {
                     Toast.makeText(this@MainActivity, "Error loading types: ${e.message}", Toast.LENGTH_SHORT).show()
+                } finally {
+                    showLoading(false)
                 }
             }
         } else {
@@ -171,7 +189,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun fetchPokemonsByTypeAndUpdateBaseList(typeName: String) {
         lifecycleScope.launch {
-            binding.recyclerView.alpha = 0.5f
+            showLoading(true)
             try {
                 val response = RetrofitInstance.api.getPokemonsByType(typeName.lowercase(Locale.getDefault()))
                 if (response.isSuccessful && response.body() != null) {
@@ -187,7 +205,7 @@ class MainActivity : AppCompatActivity() {
                 currentBasePokemonList = emptyList()
             }
             applyAllFilters() // Re-apply all filters as the base list has changed
-            binding.recyclerView.alpha = 1.0f
+            showLoading(false)
         }
     }
 

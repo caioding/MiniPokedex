@@ -123,5 +123,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             tools:text="HP: 35\nAttack: 55\nDefense: 40\nSp. Atk: 50\nSp. Def: 50\nSpeed: 90" />
 
+    <include layout="@layout/loading_indicator" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

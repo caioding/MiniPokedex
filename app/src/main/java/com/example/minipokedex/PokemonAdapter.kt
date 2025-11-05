@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.example.minipokedex.databinding.PokemonListItemBinding // Using ViewBinding
+import com.example.minipokedex.databinding.PokemonListItemBinding
 import java.util.Locale
 
 class PokemonAdapter(
@@ -28,10 +28,10 @@ class PokemonAdapter(
 
     override fun getItemCount(): Int = pokemonList.size
 
-    @SuppressLint("NotifyDataSetChanged") // For simplicity. Consider DiffUtil for better performance.
+    @SuppressLint("NotifyDataSetChanged")
     fun updateData(newPokemonList: List<PokemonListItem>) {
         pokemonList = newPokemonList
-        notifyDataSetChanged()
+        notifyDataSetChanged() // Recarrega a lista inteira. Para apps maiores, use DiffUtil.
     }
 
     inner class PokemonViewHolder(private val binding: PokemonListItemBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -39,11 +39,11 @@ class PokemonAdapter(
             binding.pokemonNameTextView.text = pokemon.name.replaceFirstChar { 
                 if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() 
             }
-            binding.pokemonIdTextView.text = "#${pokemon.getPokemonId()}" // Added this line
+            binding.pokemonIdTextView.text = "#${pokemon.getPokemonId()}"
             binding.pokemonImageView.load(pokemon.getImageUrl()) {
                 crossfade(true)
-                placeholder(R.mipmap.ic_launcher) // Generic placeholder
-                error(R.drawable.ic_error_placeholder) // Custom error placeholder
+                placeholder(R.mipmap.ic_launcher)
+                error(R.drawable.ic_error_placeholder)
             }
         }
     }
